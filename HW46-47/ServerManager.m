@@ -297,7 +297,7 @@
       onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
     
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            @"2989826",             @"user_id",
+                            userID,             @"user_id",
                             text,               @"message",
                             self.accessToken.token, @"access_token",nil];
     

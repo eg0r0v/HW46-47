@@ -41,6 +41,10 @@ static NSInteger postsInRequest = 20;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ChatTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"chatCell"];
+    
+    UIRefreshControl* refresh = [[UIRefreshControl alloc] init];
+    [refresh addTarget:self action:@selector(refreshMessages) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
 
     self.messagesArray = [NSMutableArray array];
     
