@@ -155,31 +155,38 @@ static NSInteger postsInRequest = 20;
         return cell;
     }
     
-    [cell setMessageObject:object];
-    
-    NSString* authorID = [object.authorID stringValue];
-    
-    [[ServerManager sharedManager] getUser:authorID onSuccess:^(User *user) {
+    if (!cell.messageObject || cell.messageObject && ![object.authorID isEqualToNumber:cell.messageObject.authorID]) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [cell.avatarImageView setImage:nil];
+        [cell.userShortName setText: @""];
+        
+        
+        NSString* authorID = [object.authorID stringValue];
+        
+        [[ServerManager sharedManager] getUser:authorID onSuccess:^(User *user) {
             
-            [cell.userShortName setText: user.firstName];
-            
-            __weak UIImageView* weakCellImage = cell.avatarImageView;
-            
-            [cell.avatarImageView
-             setImageWithURLRequest:[NSURLRequest requestWithURL:user.imageURL]
-             placeholderImage:nil
-             success:^void(NSURLRequest * __nonnull request, NSHTTPURLResponse * __nonnull responce, UIImage * __nonnull image) {
-                 weakCellImage.image = image;
-                 [cell setNeedsLayout];
-             } failure:^ void(NSURLRequest * __nonnull request,
-                              NSHTTPURLResponse * __nonnull responce,
-                              NSError * __nonnull error) {
-             }];
-            
-        });
-    } onFailure:^(NSError *error, NSInteger statusCode) {}];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [cell.userShortName setText: user.firstName];
+                
+                __weak UIImageView* weakCellImage = cell.avatarImageView;
+                
+                [cell.avatarImageView
+                 setImageWithURLRequest:[NSURLRequest requestWithURL:user.imageURL]
+                 placeholderImage:nil
+                 success:^void(NSURLRequest * __nonnull request, NSHTTPURLResponse * __nonnull responce, UIImage * __nonnull image) {
+                     weakCellImage.image = image;
+                     [cell setNeedsLayout];
+                 } failure:^ void(NSURLRequest * __nonnull request,
+                                  NSHTTPURLResponse * __nonnull responce,
+                                  NSError * __nonnull error) {
+                 }];
+                
+            });
+        } onFailure:^(NSError *error, NSInteger statusCode) {}];
+    }
+    
+    [cell setMessageObject:object];
     
     return cell;
 }

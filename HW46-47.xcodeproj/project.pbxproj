@@ -50,6 +50,7 @@
 		016448821D34C88E003CA350 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016448801D34C88E003CA350 /* ChatTableViewCell.m */; };
 		016448831D34C88E003CA350 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 016448811D34C88E003CA350 /* ChatTableViewCell.xib */; };
 		016448871D355D31003CA350 /* MessageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 016448861D355D31003CA350 /* MessageObject.m */; };
+		01D57CE61D3BC2E600F684EA /* WallPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D57CE51D3BC2E600F684EA /* WallPostViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +137,8 @@
 		016448811D34C88E003CA350 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		016448851D355D31003CA350 /* MessageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageObject.h; sourceTree = "<group>"; };
 		016448861D355D31003CA350 /* MessageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageObject.m; sourceTree = "<group>"; };
+		01D57CE41D3BC2E600F684EA /* WallPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostViewController.h; sourceTree = "<group>"; };
+		01D57CE51D3BC2E600F684EA /* WallPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +311,8 @@
 			children = (
 				014B585F1D24F44F009DBF76 /* GroupWallViewController.h */,
 				014B58601D24F44F009DBF76 /* GroupWallViewController.m */,
+				01D57CE41D3BC2E600F684EA /* WallPostViewController.h */,
+				01D57CE51D3BC2E600F684EA /* WallPostViewController.m */,
 				014B58621D24F463009DBF76 /* WallPostCell.h */,
 				014B58631D24F463009DBF76 /* WallPostCell.m */,
 			);
@@ -436,6 +441,7 @@
 				014B586C1D2AA225009DBF76 /* Group.m in Sources */,
 				014B57FD1D2418F7009DBF76 /* main.m in Sources */,
 				014B58541D24F3F7009DBF76 /* ServerObject.m in Sources */,
+				01D57CE61D3BC2E600F684EA /* WallPostViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
