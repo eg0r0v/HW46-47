@@ -47,6 +47,12 @@
       onSuccess:(void(^)()) success
       onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
 
+-(void)sendText:(NSString*)text
+     toWallPost:(NSString*) wallPostId
+    onGroupWall:(NSString*) groupID
+      onSuccess:(void(^)()) success
+      onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
+
 
 -(void) getMessageHistoryWithOffset:(NSInteger)offset
                            andCount:(NSInteger)count
@@ -60,5 +66,29 @@
                 onSuccess:(void(^)(NSArray* messages, long messagesNumber)) success
                 onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
 
+-(void) isLikedObjectOfType:(NSString*)objectType
+                     withId:(NSString*)objectId
+                ofCommunity:(NSString*)communityID
+                  onSuccess:(void(^)(BOOL isLiked)) success
+                  onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
+
+-(void) addLikesToObjectOfType:(NSString*)objectType
+                        withId:(NSString*)objectId
+                   ofCommunity:(NSString*)communityID
+                     onSuccess:(void(^)(NSDictionary* likes)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
+
+-(void) deleteLikesFromObjectWithType:(NSString*)objectType
+                               withId:(NSString*)objectId
+                          ofCommunity:(NSString*)communityID
+                            onSuccess:(void(^)(NSDictionary* likes)) success
+                            onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
+
+-(void) getCommentsForWallPost:(NSString*)wallPostID
+                   ofCommunity:(NSString*)communityID
+                    withOffset:(NSInteger)offset
+                      andCount:(NSInteger)count
+                     onSuccess:(void(^)(NSArray* comments)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure;
 
 @end

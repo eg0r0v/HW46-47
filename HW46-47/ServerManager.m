@@ -15,6 +15,7 @@
 #import "WallPost.h"
 #import "HistoryObject.h"
 #import "MessageObject.h"
+#import "Comment.h"
 
 @interface ServerManager()
 
@@ -235,7 +236,6 @@
          
          NSMutableArray* objectsArray = [NSMutableArray array];
          
-         
          for (NSDictionary* dict in dictsArray) {
              WallPost* post = [[WallPost alloc] initWithServerResponce:dict];
              [objectsArray addObject:post];
@@ -303,6 +303,40 @@
     
     [self.requestOperationManager
      POST:@"messages.send"
+     parameters:params
+     success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
+         if (success) {
+             success(responseObject);
+         }
+         
+     } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
+         NSLog(@"error: %@", error);
+         
+         if (failure) {
+             failure(error, operation.response.statusCode);
+         }
+     }];
+    
+}
+
+-(void)sendText:(NSString*)text
+       toWallPost:(NSString*) wallPostId
+    onGroupWall:(NSString*) groupID
+      onSuccess:(void(^)()) success
+      onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
+    
+    if (![groupID hasPrefix:@"-"]) {
+        groupID = [@"-" stringByAppendingString:groupID];
+    }
+
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            groupID,            @"owner_id",
+                            wallPostId,             @"post_id",
+                            text,               @"message",
+                            self.accessToken.token, @"access_token",nil];
+    
+    [self.requestOperationManager
+     POST:@"wall.createComment"
      parameters:params
      success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
          if (success) {
@@ -417,13 +451,176 @@
          
      } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
          NSLog(@"error: %@", error);
-         
          if (failure) {
              failure(error, operation.response.statusCode);
          }
-         
      }];
+}
 
+-(void) isLikedObjectOfType:(NSString*)objectType
+                        withId:(NSString*)objectId
+                   ofCommunity:(NSString*)communityID
+                  onSuccess:(void(^)(BOOL isLiked)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
+    
+    if (![communityID hasPrefix:@"-"]) {
+        communityID = [@"-" stringByAppendingString:communityID];
+    }
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            objectId,  @"item_id",
+                            communityID, @"owner_id",
+                            objectType,    @"type",
+                            self.accessToken.token, @"access_token", nil];
+    
+    [self.requestOperationManager
+     GET:@"likes.isLiked"
+     parameters:params
+     success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
+         // NSLog(@"JSON: %@", responseObject);
+         
+         BOOL result = [[responseObject objectForKey:@"response"] boolValue];
+         
+         if (success) {
+             success(result);
+         }
+         
+     } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
+         NSLog(@"error: %@", error);
+         if (failure) {
+             failure(error, operation.response.statusCode);
+         }
+     }];
+}
+
+
+
+-(void) addLikesToObjectOfType:(NSString*)objectType
+                        withId:(NSString*)objectId
+                   ofCommunity:(NSString*)communityID
+                     onSuccess:(void(^)(NSDictionary* likes)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
+    
+    if (![communityID hasPrefix:@"-"]) {
+        communityID = [@"-" stringByAppendingString:communityID];
+    }
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            objectId,  @"item_id",
+                            communityID, @"owner_id",
+                            objectType,    @"type",
+                            self.accessToken.token, @"access_token", nil];
+    
+    [self.requestOperationManager
+     GET:@"likes.add"
+     parameters:params
+     success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
+         // NSLog(@"JSON: %@", responseObject);
+         
+         NSDictionary* dictsArray = [responseObject objectForKey:@"response"];
+         
+         if (success) {
+             success(dictsArray);
+         }
+         
+     } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
+         NSLog(@"error: %@", error);
+         if (failure) {
+             failure(error, operation.response.statusCode);
+         }
+     }];
+}
+
+-(void) deleteLikesFromObjectWithType:(NSString*)objectType
+                        withId:(NSString*)objectId
+                   ofCommunity:(NSString*)communityID
+                     onSuccess:(void(^)(NSDictionary* likes)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
+    
+    if (![communityID hasPrefix:@"-"]) {
+        communityID = [@"-" stringByAppendingString:communityID];
+    }
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            objectId,  @"item_id",
+                            communityID, @"owner_id",
+                            objectType,    @"type",
+                            self.accessToken.token, @"access_token", nil];
+    
+    [self.requestOperationManager
+     GET:@"likes.delete"
+     parameters:params
+     success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
+         // NSLog(@"JSON: %@", responseObject);
+         
+         NSDictionary* dictsArray = [responseObject objectForKey:@"response"];
+         
+         if (success) {
+             success(dictsArray);
+         }
+         
+     } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
+         NSLog(@"error: %@", error);
+         if (failure) {
+             failure(error, operation.response.statusCode);
+         }
+     }];
+}
+
+
+
+-(void) getCommentsForWallPost:(NSString*)wallPostID
+                   ofCommunity:(NSString*)communityID
+                    withOffset:(NSInteger)offset
+                      andCount:(NSInteger)count
+                     onSuccess:(void(^)(NSArray* comments)) success
+                     onFailure:(void(^)(NSError* error, NSInteger statusCode)) failure {
+    
+    if (![communityID hasPrefix:@"-"]) {
+        communityID = [@"-" stringByAppendingString:communityID];
+    }
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            wallPostID,  @"post_id",
+                            communityID, @"owner_id",
+                            @(count),   @"count",
+                            @(offset),  @"offset",
+                            @"1", @"need_likes",
+                            self.accessToken.token, @"access_token", nil];
+    
+    [self.requestOperationManager
+     GET:@"wall.getComments"
+     parameters:params
+     success:^void(AFHTTPRequestOperation * __nonnull operation, id __nonnull responseObject) {
+         // NSLog(@"JSON: %@", responseObject);
+         
+         NSArray* dictsArray = [responseObject objectForKey:@"response"];
+         
+         long messagesCount = 0;
+         if ([dictsArray count] > 1) {
+             messagesCount = [[dictsArray firstObject] longValue];
+             dictsArray = [dictsArray subarrayWithRange:NSMakeRange(1, (int)[dictsArray count] - 1)];
+         } else {
+             dictsArray = nil;
+         }
+         
+         NSMutableArray* objectsArray = [NSMutableArray array];
+         
+         for (NSDictionary* dict in dictsArray) {
+             Comment * comment = [[Comment alloc] initWithServerResponce:dict];
+             [objectsArray addObject:comment];
+         }
+         
+         if (success) {
+             success(objectsArray);
+         }
+         
+     } failure:^void(AFHTTPRequestOperation * __nonnull operation, NSError * __nonnull error) {
+         NSLog(@"error: %@", error);
+         if (failure) {
+             failure(error, operation.response.statusCode);
+         }
+     }];
     
 }
 

@@ -161,6 +161,11 @@ static NSInteger postsInRequest = 10;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (indexPath.row == self.dialogsArray.count) {
+        [self getMoreHistory];
+        return;
+    }
+    
     HistoryObject* selectedObject = [self.dialogsArray objectAtIndex:indexPath.row];
     
     [[ServerManager sharedManager] getUser:selectedObject.authorID onSuccess:^(User *user) {

@@ -50,7 +50,11 @@
 		016448821D34C88E003CA350 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 016448801D34C88E003CA350 /* ChatTableViewCell.m */; };
 		016448831D34C88E003CA350 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 016448811D34C88E003CA350 /* ChatTableViewCell.xib */; };
 		016448871D355D31003CA350 /* MessageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 016448861D355D31003CA350 /* MessageObject.m */; };
+		01D3898B1D3FA71A002EDED4 /* WallPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01D3898A1D3FA71A002EDED4 /* WallPostCell.xib */; };
 		01D57CE61D3BC2E600F684EA /* WallPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D57CE51D3BC2E600F684EA /* WallPostViewController.m */; };
+		01D57CE91D3D2C5800F684EA /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D57CE81D3D2C5800F684EA /* Comment.m */; };
+		01D57CEF1D3E004D00F684EA /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D57CEE1D3E004D00F684EA /* CommentTableViewCell.m */; };
+		01F113571D420AF4001F8E21 /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F113561D420AF4001F8E21 /* CommentTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,8 +141,14 @@
 		016448811D34C88E003CA350 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		016448851D355D31003CA350 /* MessageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageObject.h; sourceTree = "<group>"; };
 		016448861D355D31003CA350 /* MessageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageObject.m; sourceTree = "<group>"; };
+		01D3898A1D3FA71A002EDED4 /* WallPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WallPostCell.xib; sourceTree = "<group>"; };
 		01D57CE41D3BC2E600F684EA /* WallPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostViewController.h; sourceTree = "<group>"; };
 		01D57CE51D3BC2E600F684EA /* WallPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostViewController.m; sourceTree = "<group>"; };
+		01D57CE71D3D2C5800F684EA /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
+		01D57CE81D3D2C5800F684EA /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
+		01D57CED1D3E004D00F684EA /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
+		01D57CEE1D3E004D00F684EA /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
+		01F113561D420AF4001F8E21 /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +290,8 @@
 				014B58511D24F3F7009DBF76 /* User.m */,
 				014B58521D24F3F7009DBF76 /* WallPost.h */,
 				014B58531D24F3F7009DBF76 /* WallPost.m */,
+				01D57CE71D3D2C5800F684EA /* Comment.h */,
+				01D57CE81D3D2C5800F684EA /* Comment.m */,
 				016448851D355D31003CA350 /* MessageObject.h */,
 				016448861D355D31003CA350 /* MessageObject.m */,
 			);
@@ -315,6 +327,10 @@
 				01D57CE51D3BC2E600F684EA /* WallPostViewController.m */,
 				014B58621D24F463009DBF76 /* WallPostCell.h */,
 				014B58631D24F463009DBF76 /* WallPostCell.m */,
+				01D3898A1D3FA71A002EDED4 /* WallPostCell.xib */,
+				01D57CED1D3E004D00F684EA /* CommentTableViewCell.h */,
+				01D57CEE1D3E004D00F684EA /* CommentTableViewCell.m */,
+				01F113561D420AF4001F8E21 /* CommentTableViewCell.xib */,
 			);
 			name = GroupWall;
 			sourceTree = "<group>";
@@ -395,6 +411,8 @@
 				014B58691D2A6100009DBF76 /* WriteMessageViewController.xib in Resources */,
 				016448831D34C88E003CA350 /* ChatTableViewCell.xib in Resources */,
 				014B58061D2418F7009DBF76 /* Main.storyboard in Resources */,
+				01F113571D420AF4001F8E21 /* CommentTableViewCell.xib in Resources */,
+				01D3898B1D3FA71A002EDED4 /* WallPostCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +439,7 @@
 				014B584A1D24F3BA009DBF76 /* UIImageView+AFNetworking.m in Sources */,
 				0164487E1D34C801003CA350 /* ChatViewController.m in Sources */,
 				014B583D1D24F3BA009DBF76 /* AFHTTPRequestOperation.m in Sources */,
+				01D57CEF1D3E004D00F684EA /* CommentTableViewCell.m in Sources */,
 				014B58561D24F3F7009DBF76 /* WallPost.m in Sources */,
 				016448821D34C88E003CA350 /* ChatTableViewCell.m in Sources */,
 				014B58471D24F3BA009DBF76 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -442,6 +461,7 @@
 				014B57FD1D2418F7009DBF76 /* main.m in Sources */,
 				014B58541D24F3F7009DBF76 /* ServerObject.m in Sources */,
 				01D57CE61D3BC2E600F684EA /* WallPostViewController.m in Sources */,
+				01D57CE91D3D2C5800F684EA /* Comment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

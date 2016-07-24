@@ -10,6 +10,7 @@
 #import "ServerManager.h"
 #import "Group.h"
 #import "User.h"
+#import "WallPost.h"
 
 @interface WriteMessageViewController () <UITextViewDelegate>
 
@@ -19,10 +20,13 @@
 @property (weak, nonatomic) IBOutlet UIButton* sendMessageButton;
 @property (strong, nonatomic) Group* groupToSend;
 @property (strong, nonatomic) User* userToSend;
+@property (strong, nonatomic) WallPost* wallPostToSend;
 
 -(IBAction)actionClickedSend:(id)sender;
 
 @end
+
+static NSString* groupId = @"58860049";
 
 @implementation WriteMessageViewController
 
@@ -33,6 +37,8 @@
         [self.destinationIdName setText:self.groupToSend.groupName];
     } else if (self.userToSend) {
         [self.destinationIdName setText:[NSString stringWithFormat:@"%@ %@", self.userToSend.firstName, self.userToSend.lastName]];
+    } else if (self.wallPostToSend) {
+        [self.destinationIdName setText:@"Comment to post"];
     }
     
     [self.messageTextView setDelegate:self];
@@ -71,6 +77,15 @@
     return self;
 }
 
+- (instancetype)initWithWallPost:(WallPost *)wallPostToSend
+{
+    self = [super initWithNibName:@"WriteMessageViewController" bundle:[NSBundle mainBundle]];
+    if (self) {
+        self.wallPostToSend = wallPostToSend;
+    }
+    return self;
+}
+
 -(void)handleTapToDismiss:(UITapGestureRecognizer *)tap {
     if ([self.messageTextView isFirstResponder]) {
         [self.messageTextView resignFirstResponder];
@@ -79,6 +94,9 @@
         CGPoint tapLocation = [self.view convertPoint:[tap locationInView:self.view] toView:nil];
         if (!CGRectContainsPoint(alertFrame, tapLocation)) {
             [self.view endEditing:YES];
+            self.wallPostToSend = nil;
+            self.userToSend = nil;
+            self.groupToSend = nil;
             [self dismissViewControllerAnimated:YES completion:^{
                 
             }];
@@ -107,12 +125,21 @@
     
     if (self.groupToSend) {
         [[ServerManager sharedManager] postText:self.messageTextView.text onGroupWall:self.groupToSend.groupID onSuccess:^(id result) {
+            self.groupToSend = nil;
             [self dismissWithSuccess];
         } onFailure:^(NSError *error, NSInteger statusCode) {
             
         }];
     } else if (self.userToSend) {
         [[ServerManager sharedManager] sendText:self.messageTextView.text toUserId:self.userToSend.userID onSuccess:^{
+            self.userToSend = nil;
+            [self dismissWithSuccess];
+        } onFailure:^(NSError *error, NSInteger statusCode) {
+            
+        }];
+    } else if (self.wallPostToSend) {
+        [[ServerManager sharedManager] sendText:self.messageTextView.text toWallPost:self.wallPostToSend.wallPostID onGroupWall:groupId onSuccess:^{
+            self.wallPostToSend = nil;
             [self dismissWithSuccess];
         } onFailure:^(NSError *error, NSInteger statusCode) {
             

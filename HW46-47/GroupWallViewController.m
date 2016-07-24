@@ -14,6 +14,7 @@
 
 #import "UIImageView+AFNetworking.h"
 
+#import "WallPostViewController.h"
 #import "WallPostCell.h"
 
 #import "User.h"
@@ -25,6 +26,7 @@
 @property (strong, nonatomic) Group* currentGroup;
 @property (strong, nonatomic) User* currentUser;
 @property (strong, nonatomic) NSMutableArray* postsArray;
+@property (assign, nonatomic) BOOL reachedMaximum;
 @property (assign, nonatomic) BOOL firstTimeAppear;
 
 @end
@@ -42,6 +44,7 @@ static NSString* groupId = @"58860049";
     self.postsArray =  [NSMutableArray array];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"WallPostCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"wallPostCell"];
     
     UIRefreshControl* refresh = [[UIRefreshControl alloc] init];
     [refresh addTarget:self action:@selector(refreshWall) forControlEvents:UIControlEventValueChanged];
@@ -116,6 +119,7 @@ static NSString* groupId = @"58860049";
     if (!self.refreshControl.isRefreshing) {
         [self.refreshControl beginRefreshing];
     }
+    self.reachedMaximum = NO;
     [[ServerManager sharedManager]
      getGroupWall:groupId
      withOffset:0 andCount:MAX(postsInRequest, [self.postsArray count])
@@ -124,6 +128,10 @@ static NSString* groupId = @"58860049";
          [self.postsArray removeAllObjects];
          
          [self.postsArray addObjectsFromArray:posts];
+         
+         if (posts.count < postsInRequest) {
+             self.reachedMaximum = YES;
+         }
          
          [self.tableView reloadData];
          
@@ -148,6 +156,10 @@ static NSString* groupId = @"58860049";
          
          [self.postsArray addObjectsFromArray:posts];
          
+         if (posts.count < postsInRequest) {
+             self.reachedMaximum = YES;
+         }
+         
           NSMutableArray* newPaths = [NSMutableArray array];
 
           for (int i = (int)[self.postsArray count] - (int)[posts count]; i < (int)[self.postsArray count]; i++) {
@@ -163,6 +175,10 @@ static NSString* groupId = @"58860049";
          NSLog(@"error = %@, code = %d", [error localizedDescription], statusCode);
          
      }];
+}
+
+-(void)changedLikeToWallPost:(NSString *)wallPostId {
+    
 }
 
 #pragma mark - UITableViewDataSource
@@ -192,8 +208,12 @@ static NSString* groupId = @"58860049";
         WallPostCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
         [cell setDelegate:self];
         
+        [cell setBackgroundColor:[UIColor whiteColor]];
+        
         WallPost* post = [self.postsArray objectAtIndex:indexPath.row];
         [cell setPost:post];
+        
+        [cell.likesButton setBackgroundColor:[UIColor clearColor]];
         
         NSString* authorID = post.fromUserID;
         
@@ -231,6 +251,11 @@ static NSString* groupId = @"58860049";
     
     if (indexPath.row == [self.postsArray count]) {
         [self getPostsFromServer];
+    } else {
+        WallPost* post = [self.postsArray objectAtIndex:indexPath.row];
+        WallPostViewController* wpvc = [[WallPostViewController alloc] init];
+        [wpvc setWallPost:post];
+        [self.navigationController pushViewController:wpvc animated:YES];
     }
 }
 
@@ -247,7 +272,7 @@ static NSString* groupId = @"58860049";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == [self.postsArray count]) {
+    if (indexPath.row == [self.postsArray count] && !self.reachedMaximum) {
         [self getPostsFromServer];
     }
 }

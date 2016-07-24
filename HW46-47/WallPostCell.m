@@ -10,26 +10,28 @@
 #import "WallPost.h"
 #import "User.h"
 
+#import "ServerManager.h"
+
 @interface WallPostCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel* postTextLabel;
 @property (weak, nonatomic) IBOutlet UILabel* dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel* likesLabel;
 @property (weak, nonatomic) IBOutlet UILabel* commentsLabel;
 
 @end
 
 @implementation WallPostCell
 
-
 -(void)setPost:(WallPost *)post {
     _post = post;
     
     [self.postTextLabel setText:post.text];
-    [self.likesLabel setText:post.likesNumber];
     [self.commentsLabel setText:post.commentsNumber];
     [self.dateLabel setText:post.date];
     
+    [self.likesButton setTitle:post.likesNumber forState:UIControlStateNormal];
+    [self.likesButton setTitle:post.likesNumber forState:UIControlStateSelected];
+    [self.likesButton setTitle:post.likesNumber forState:UIControlStateHighlighted];
 }
 
 -(void)setUser:(User*)user {
@@ -37,8 +39,18 @@
     [self.userInfoLabel setText:[NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName]];
 }
 
+-(IBAction)userDidClickLike:(id)sender {
+    
+    if (!self.delegate) {
+        return;
+    }
+    [self.delegate changedLikeToWallPost:self.post.wallPostID];
+}
 
 -(void)awakeFromNib {
+    
+    [self.likesButton.layer setCornerRadius:4.f];
+    
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
                                              initWithTarget:self action:@selector(actionClickImage)];
     self.avatarImageView.userInteractionEnabled = YES;
@@ -73,6 +85,6 @@
                                   attributes:attributes
                                      context:nil];
     
-    return 2*offset +  MAX(17 + 3 + CGRectGetHeight(rect) + 5 + 15, 53);
+    return 4*offset +  MAX(17 + 3 + CGRectGetHeight(rect) + 5 + 15, 53);
 }
 @end

@@ -6,7 +6,6 @@
 //  Copyright © 2016 Илья Егоров. All rights reserved.
 //
 
-#import "ServerManager.h"
 #import "WallPost.h"
 
 @implementation WallPost
@@ -15,6 +14,7 @@
 {
     self = [super initWithServerResponce:responceObject];
     if (self) {
+        self.wallPostID = [[responceObject objectForKey:@"id"] stringValue];
         self.fromUserID = [[responceObject objectForKey:@"from_id"] stringValue];
         self.text = [responceObject objectForKey:@"text"];
         self.text = [self.text stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
@@ -26,9 +26,12 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"dd.MM.yyyy HH:mm"];
         self.date = [dateFormatter stringFromDate:postDate];
-        
     }
     return self;
+}
+
+-(void)updateLikes {
+    
 }
 
 @end

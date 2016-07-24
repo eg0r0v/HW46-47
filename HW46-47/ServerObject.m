@@ -8,6 +8,8 @@
 
 #import "ServerObject.h"
 
+static NSString* groupId = @"58860049";
+
 @implementation ServerObject
 
 - (instancetype)initWithServerResponce:(NSDictionary *)responceObject

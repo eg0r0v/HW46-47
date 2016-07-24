@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class Group, User;
+@class Group, User, WallPost;
 
 @interface WriteMessageViewController : UIViewController
 
@@ -16,5 +16,6 @@
 
 - (instancetype)initWithGroup:(Group*)groupToSend;
 - (instancetype)initWithUser:(User*)userToSend;
+- (instancetype)initWithWallPost:(WallPost *)wallPostToSend;
 
 @end

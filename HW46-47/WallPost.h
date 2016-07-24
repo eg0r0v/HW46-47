@@ -15,5 +15,6 @@
 @property (strong, nonatomic) NSString* likesNumber;
 @property (strong, nonatomic) NSString* commentsNumber;
 @property (strong, nonatomic) NSString* date;
+@property (strong, nonatomic) NSString* wallPostID;
 
 @end

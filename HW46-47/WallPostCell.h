@@ -13,6 +13,7 @@
 @protocol WallPostCellDelegate <NSObject>
 
 -(void)shouldPostMessage:(id)sender;
+-(void)changedLikeToWallPost:(NSString*)wallPostId;
 
 @end
 
@@ -20,6 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel* userInfoLabel;
 @property (weak, nonatomic) IBOutlet UIImageView* avatarImageView;
+@property (weak, nonatomic) IBOutlet UIButton* likesButton;
 @property (strong, nonatomic) User* user;
 @property (strong, nonatomic) WallPost* post;
 @property (strong, nonatomic) id <WallPostCellDelegate> delegate;
